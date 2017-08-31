@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>Demo</title>
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width" />
+<base href="/" />
+<link rel="stylesheet" type="text/css"
+	href="/webjars/bootstrap/css/bootstrap.min.css" />
+<script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+<script type="text/javascript"
+	src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body ng-app="app">
+	<h1>Demo</h1>
+	<div class="container" ng-controller="main">
+		<iframe
+			src="http://localhost:8181"></iframe>
+		<br>
+		<button ng-click="sendMessage();">Send response</button>
+		<br>
+		<ol>
+			<li ng-repeat="message in messages">{{message}}</li>
+		</ol>
+	</div>
+	<script type="text/javascript" src="/webjars/angularjs/angular.min.js"></script>
+	<script type="text/javascript" src="/webjars/angular-post-message/dist/angular-post-message.min.js"></script>
+	<script type="text/javascript">
+		angular.module("app", [ 'ngPostMessage' ]).controller("main",
+				function($scope) {
+					$scope.messages = [];
+					$scope.$root.$on('$messageIncoming', function(event, data) {
+						$scope.messages.push(angular.fromJson(data));
+					});
+					$scope.sendMessage = function() {
+						$scope.$emit('$messageOutgoing', angular.toJson({
+							"response" : "hi"
+						}));
+					};
+				});
+	</script>
+</body>
+</html>
